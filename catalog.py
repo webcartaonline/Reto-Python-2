@@ -54,3 +54,33 @@ def find_piece_by_id(catalog, piece_id):
             return piece
 
     return None
+
+
+def remove_piece(catalog, piece_id):
+    """Quita una pieza del catalogo por su id.
+
+    Devuelve True si se pudo quitar y False si la pieza no estaba.
+    """
+    if not isinstance(catalog, list):
+        raise ValueError("El catalogo debe ser una lista.")
+
+    try:
+        piece = find_piece_by_id(catalog, piece_id)
+
+        if piece is None:
+            raise ValueError("La pieza con id '" + str(piece_id) + "' no fue encontrada.")
+
+        catalog.remove(piece)
+        return True
+
+    except ValueError as error:
+        print("Error al quitar la pieza: " + str(error))
+        return False
+
+
+def piece_exists(catalog, piece_id):
+    """Indica si una pieza esta en el catalogo, sin lanzar errores."""
+    if not isinstance(catalog, list):
+        raise ValueError("El catalogo debe ser una lista.")
+
+    return find_piece_by_id(catalog, piece_id) is not None
