@@ -29,3 +29,28 @@ def add_piece(piece_id, name, category, price, status, description):
     }
 
     return piece
+
+
+def list_pieces(catalog):
+    """Devuelve una lista con los nombres de todas las piezas del catalogo."""
+    if not isinstance(catalog, list):
+        raise ValueError("El catalogo debe ser una lista.")
+
+    names = []
+
+    for piece in catalog:
+        names.append(piece["name"])
+
+    return names
+
+
+def find_piece_by_id(catalog, piece_id):
+    """Busca una pieza por su id y la devuelve, o None si no esta."""
+    if not isinstance(catalog, list):
+        raise ValueError("El catalogo debe ser una lista.")
+
+    for piece in catalog:
+        if piece["id"] == str(piece_id).strip():
+            return piece
+
+    return None
