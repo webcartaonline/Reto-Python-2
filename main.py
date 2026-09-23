@@ -1,8 +1,8 @@
-"""Programa principal del catálogo de coleccionables."""
+# Programa principal del catalogo de coleccionables.
 
 
 def main():
-    print("Catálogo de piezas coleccionables")
+    print("=== Catalogo de coleccionables ===")
 
 
 if __name__ == "__main__":
