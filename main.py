@@ -113,6 +113,44 @@ def option_average_price(catalog):
     print("El precio promedio es " + str(round(average, 2)) + " euros.")
 
 
+def option_find_piece(catalog):
+    """Pide un id y muestra la pieza si esta en el catalogo."""
+    print("")
+    print("--- Buscar pieza por ID ---")
+
+    piece_id = input("ID a buscar: ").strip()
+
+    if piece_id == "":
+        print("Tienes que escribir un id.")
+        return
+
+    piece = catalog_module.find_piece_by_id(catalog, piece_id)
+
+    if piece is None:
+        print("No hay ninguna pieza con el id '" + piece_id + "'.")
+        return
+
+    print_piece(piece)
+    print("Descripcion: " + piece["description"])
+
+
+def option_remove_piece(catalog):
+    """Pide un id y quita esa pieza del catalogo."""
+    print("")
+    print("--- Eliminar pieza ---")
+
+    piece_id = input("ID a eliminar: ").strip()
+
+    if piece_id == "":
+        print("Tienes que escribir un id.")
+        return
+
+    removed = catalog_module.remove_piece(catalog, piece_id)
+
+    if removed:
+        print("Pieza eliminada correctamente.")
+
+
 def main():
     """Mantiene el menu en bucle hasta que el usuario decide salir."""
     catalog = []
@@ -132,8 +170,10 @@ def main():
             option_available_pieces(catalog)
         elif option == "4":
             option_average_price(catalog)
-        elif option in ["5", "6"]:
-            print("Opcion todavia no disponible.")
+        elif option == "5":
+            option_find_piece(catalog)
+        elif option == "6":
+            option_remove_piece(catalog)
         else:
             print("Opcion no valida, elige un numero del 1 al 7.")
 
