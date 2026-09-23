@@ -164,3 +164,27 @@ def filter_by_min_price(catalog, min_price):
             found.append(piece)
 
     return found
+
+
+def get_average_price(catalog):
+    """Calcula el precio promedio de todas las piezas del catalogo.
+
+    Si el catalogo esta vacio avisa por pantalla y devuelve 0.
+    """
+    if not isinstance(catalog, list):
+        raise ValueError("El catalogo debe ser una lista.")
+
+    try:
+        if len(catalog) == 0:
+            raise ValueError("El catalogo esta vacio, no se puede calcular el promedio.")
+
+        total = 0
+
+        for piece in catalog:
+            total = total + piece["price"]
+
+        return total / len(catalog)
+
+    except ValueError as error:
+        print("Error al calcular el promedio: " + str(error))
+        return 0
