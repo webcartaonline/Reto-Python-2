@@ -84,3 +84,83 @@ def piece_exists(catalog, piece_id):
         raise ValueError("El catalogo debe ser una lista.")
 
     return find_piece_by_id(catalog, piece_id) is not None
+
+
+def get_catalog_summary(catalog):
+    """Cuenta cuantas piezas hay por cada categoria.
+
+    Devuelve un diccionario donde la clave es la categoria y el valor
+    es la cantidad de piezas de esa categoria.
+    """
+    if not isinstance(catalog, list):
+        raise ValueError("El catalogo debe ser una lista.")
+
+    summary = {}
+
+    for piece in catalog:
+        category = piece["category"]
+
+        if category in summary:
+            summary[category] = summary[category] + 1
+        else:
+            summary[category] = 1
+
+    return summary
+
+
+def get_pieces_by_category(catalog, category):
+    """Devuelve los nombres de las piezas que pertenecen a una categoria.
+
+    Si no hay coincidencias devuelve una lista vacia.
+    """
+    if not isinstance(catalog, list):
+        raise ValueError("El catalogo debe ser una lista.")
+
+    wanted = str(category).strip().lower()
+    names = []
+
+    for piece in catalog:
+        if piece["category"].strip().lower() == wanted:
+            names.append(piece["name"])
+
+    return names
+
+
+def filter_by_status(catalog, status):
+    """Devuelve las piezas que tienen el estado indicado.
+
+    Lanza ValueError si el estado no es uno de los permitidos.
+    """
+    if not isinstance(catalog, list):
+        raise ValueError("El catalogo debe ser una lista.")
+
+    validations.validate_status(status)
+
+    wanted = status.strip().lower()
+    found = []
+
+    for piece in catalog:
+        if piece["status"] == wanted:
+            found.append(piece)
+
+    return found
+
+
+def filter_by_min_price(catalog, min_price):
+    """Devuelve las piezas cuyo precio es mayor al precio minimo recibido.
+
+    Lanza ValueError si el precio minimo no es un numero.
+    """
+    if not isinstance(catalog, list):
+        raise ValueError("El catalogo debe ser una lista.")
+
+    if isinstance(min_price, bool) or not isinstance(min_price, (int, float)):
+        raise ValueError("El precio minimo debe ser un numero.")
+
+    found = []
+
+    for piece in catalog:
+        if piece["price"] > min_price:
+            found.append(piece)
+
+    return found
