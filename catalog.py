@@ -1,14 +1,14 @@
-"""Funciones del catalogo de piezas coleccionables.
+"""Functions for the collectible pieces catalog.
 
-Aqui van: agregar, listar, buscar, quitar, filtrar y las metricas.
-Las validaciones se delegan siempre en el modulo validations.
+This module adds, lists, finds, removes and filters pieces, and computes
+metrics. Validation is always delegated to the validations module.
 """
 
 import validations
 
 
 def add_piece(piece_id, name, category, price, status, description):
-    """Valida los datos recibidos y devuelve la pieza como diccionario."""
+    """Validate the received data and return the piece as a dictionary."""
     validations.validate_not_empty(piece_id, "id")
     validations.validate_not_empty(name, "name")
     validations.validate_not_empty(category, "category")
@@ -32,9 +32,9 @@ def add_piece(piece_id, name, category, price, status, description):
 
 
 def list_pieces(catalog):
-    """Devuelve una lista con los nombres de todas las piezas del catalogo."""
+    """Return a list with the names of all the pieces in the catalog."""
     if not isinstance(catalog, list):
-        raise ValueError("El catalogo debe ser una lista.")
+        raise ValueError("The catalog must be a list.")
 
     names = []
 
@@ -45,9 +45,9 @@ def list_pieces(catalog):
 
 
 def find_piece_by_id(catalog, piece_id):
-    """Busca una pieza por su id y la devuelve, o None si no esta."""
+    """Find a piece by its id and return it, or None if it is not there."""
     if not isinstance(catalog, list):
-        raise ValueError("El catalogo debe ser una lista.")
+        raise ValueError("The catalog must be a list.")
 
     for piece in catalog:
         if piece["id"] == str(piece_id).strip():
@@ -57,43 +57,43 @@ def find_piece_by_id(catalog, piece_id):
 
 
 def remove_piece(catalog, piece_id):
-    """Quita una pieza del catalogo por su id.
+    """Remove a piece from the catalog by its id.
 
-    Devuelve True si se pudo quitar y False si la pieza no estaba.
+    Return True if it was removed and False if the piece was not there.
     """
     if not isinstance(catalog, list):
-        raise ValueError("El catalogo debe ser una lista.")
+        raise ValueError("The catalog must be a list.")
 
     try:
         piece = find_piece_by_id(catalog, piece_id)
 
         if piece is None:
-            raise ValueError("La pieza con id '" + str(piece_id) + "' no fue encontrada.")
+            raise ValueError("The piece with id '" + str(piece_id) + "' was not found.")
 
         catalog.remove(piece)
         return True
 
     except ValueError as error:
-        print("Error al quitar la pieza: " + str(error))
+        print("Error removing the piece: " + str(error))
         return False
 
 
 def piece_exists(catalog, piece_id):
-    """Indica si una pieza esta en el catalogo, sin lanzar errores."""
+    """Tell whether a piece is in the catalog, without raising errors."""
     if not isinstance(catalog, list):
-        raise ValueError("El catalogo debe ser una lista.")
+        raise ValueError("The catalog must be a list.")
 
     return find_piece_by_id(catalog, piece_id) is not None
 
 
 def get_catalog_summary(catalog):
-    """Cuenta cuantas piezas hay por cada categoria.
+    """Count how many pieces there are in each category.
 
-    Devuelve un diccionario donde la clave es la categoria y el valor
-    es la cantidad de piezas de esa categoria.
+    Return a dictionary where the key is the category and the value
+    is the number of pieces in that category.
     """
     if not isinstance(catalog, list):
-        raise ValueError("El catalogo debe ser una lista.")
+        raise ValueError("The catalog must be a list.")
 
     summary = {}
 
@@ -109,12 +109,12 @@ def get_catalog_summary(catalog):
 
 
 def get_pieces_by_category(catalog, category):
-    """Devuelve los nombres de las piezas que pertenecen a una categoria.
+    """Return the names of the pieces that belong to a category.
 
-    Si no hay coincidencias devuelve una lista vacia.
+    If there are no matches, return an empty list.
     """
     if not isinstance(catalog, list):
-        raise ValueError("El catalogo debe ser una lista.")
+        raise ValueError("The catalog must be a list.")
 
     wanted = str(category).strip().lower()
     names = []
@@ -127,12 +127,12 @@ def get_pieces_by_category(catalog, category):
 
 
 def filter_by_status(catalog, status):
-    """Devuelve las piezas que tienen el estado indicado.
+    """Return the pieces that have the given status.
 
-    Lanza ValueError si el estado no es uno de los permitidos.
+    Raise ValueError if the status is not one of the allowed ones.
     """
     if not isinstance(catalog, list):
-        raise ValueError("El catalogo debe ser una lista.")
+        raise ValueError("The catalog must be a list.")
 
     validations.validate_status(status)
 
@@ -147,15 +147,15 @@ def filter_by_status(catalog, status):
 
 
 def filter_by_min_price(catalog, min_price):
-    """Devuelve las piezas cuyo precio es mayor al precio minimo recibido.
+    """Return the pieces whose price is greater than the given minimum price.
 
-    Lanza ValueError si el precio minimo no es un numero.
+    Raise ValueError if the minimum price is not a number.
     """
     if not isinstance(catalog, list):
-        raise ValueError("El catalogo debe ser una lista.")
+        raise ValueError("The catalog must be a list.")
 
     if isinstance(min_price, bool) or not isinstance(min_price, (int, float)):
-        raise ValueError("El precio minimo debe ser un numero.")
+        raise ValueError("The minimum price must be a number.")
 
     found = []
 
@@ -167,16 +167,16 @@ def filter_by_min_price(catalog, min_price):
 
 
 def get_average_price(catalog):
-    """Calcula el precio promedio de todas las piezas del catalogo.
+    """Compute the average price of all the pieces in the catalog.
 
-    Si el catalogo esta vacio avisa por pantalla y devuelve 0.
+    If the catalog is empty, print a warning and return 0.
     """
     if not isinstance(catalog, list):
-        raise ValueError("El catalogo debe ser una lista.")
+        raise ValueError("The catalog must be a list.")
 
     try:
         if len(catalog) == 0:
-            raise ValueError("El catalogo esta vacio, no se puede calcular el promedio.")
+            raise ValueError("The catalog is empty, the average cannot be computed.")
 
         total = 0
 
@@ -186,5 +186,5 @@ def get_average_price(catalog):
         return total / len(catalog)
 
     except ValueError as error:
-        print("Error al calcular el promedio: " + str(error))
+        print("Error computing the average: " + str(error))
         return 0

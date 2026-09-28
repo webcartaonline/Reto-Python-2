@@ -1,164 +1,164 @@
-# Catálogo de piezas coleccionables
+# Collectible pieces catalog
 
-Programa de consola escrito en Python que permite gestionar un catálogo básico
-de piezas coleccionables: registrar piezas, consultarlas, filtrarlas, calcular
-métricas y validar todos los datos que introduce el usuario.
+A console program written in Python to manage a basic catalog of collectible
+pieces: register pieces, look them up, filter them, compute metrics and
+validate all the data entered by the user.
 
-Es la solución al **Reto Python nivel II — Catálogo básico de coleccionables**.
+It is the solution to the **Python Challenge level II — Basic collectibles catalog**.
 
-Solo usa la librería estándar de Python, no hace falta instalar nada.
+It only uses the Python standard library, so there is nothing to install.
 
-## Estructura del proyecto
+## Project structure
 
-Este repositorio hace de carpeta `catalogo_coleccionables/` del enunciado:
+This repository acts as the `catalogo_coleccionables/` folder from the assignment:
 
 ```
 catalogo_coleccionables/
-├── catalog.py        -> Funciones del catálogo (agregar, listar, buscar, quitar, filtrar, métricas)
-├── validations.py    -> Funciones de validación de los datos de una pieza
-├── main.py           -> Programa principal, menú y flujo de ejecución
+├── catalog.py        -> Catalog functions (add, list, find, remove, filter, metrics)
+├── validations.py    -> Validation functions for the data of a piece
+├── main.py           -> Main program, menu and execution flow
 └── README.md
 ```
 
-La lógica está repartida en tres módulos y no se duplica:
+The logic is split into three modules and is not duplicated:
 
-- `main.py` importa `catalog.py`.
-- `catalog.py` importa `validations.py`.
-- Las validaciones viven solo en `validations.py`.
+- `main.py` imports `catalog.py`.
+- `catalog.py` imports `validations.py`.
+- Validations live only in `validations.py`.
 
-## Cómo ejecutar
+## How to run
 
-Hace falta tener Python 3 instalado. Desde la carpeta del proyecto:
+You need Python 3 installed. From the project folder:
 
 ```
 python main.py
 ```
 
-En Linux o macOS puede que haya que escribir `python3 main.py`.
+On Linux or macOS you may need to type `python3 main.py`.
 
-## Cómo es una pieza
+## What a piece looks like
 
-Cada pieza es un diccionario con esta forma:
+Each piece is a dictionary with this shape:
 
 ```python
 {
     "id": "p1",
     "name": "Funko Batman",
-    "category": "Figuras",
+    "category": "Figures",
     "price": 25.0,
-    "status": "disponible",
-    "description": "pieza usada en caja"
+    "status": "available",
+    "description": "used piece in box"
 }
 ```
 
-## Reglas de validación
+## Validation rules
 
-- Ningún campo obligatorio puede quedar vacío.
-- El precio tiene que ser un número mayor que cero.
-- El estado solo puede ser `disponible`, `reservada` o `vendida`.
-- La descripción tiene que contener la palabra `usada` o `certificada`.
+- No required field can be empty.
+- The price must be a number greater than zero.
+- The status can only be `available`, `reserved` or `sold`.
+- The description must contain the word `used` or `certified`.
 
-Si algo de esto falla se lanza un `ValueError` con un mensaje claro. Las
-funciones de validación nunca imprimen nada: quien las llama es el que decide
-qué mensaje mostrar.
+If any of these checks fails, a `ValueError` with a clear message is raised.
+The validation functions never print anything: the caller decides which
+message to show.
 
-## Funciones de cada archivo
+## Functions in each file
 
 ### `validations.py`
 
-| Función | Qué hace |
+| Function | What it does |
 | --- | --- |
-| `validate_not_empty(value, field_name)` | Comprueba que un campo no venga vacío e indica su nombre en el error. |
-| `validate_price(price)` | Comprueba que el precio sea numérico y mayor que cero. |
-| `validate_status(status)` | Comprueba que el estado esté entre los permitidos. |
-| `validate_description(description)` | Comprueba que la descripción lleve `usada` o `certificada`. |
+| `validate_not_empty(value, field_name)` | Checks that a field is not empty and names the field in the error. |
+| `validate_price(price)` | Checks that the price is numeric and greater than zero. |
+| `validate_status(status)` | Checks that the status is one of the allowed ones. |
+| `validate_description(description)` | Checks that the description contains `used` or `certified`. |
 
-También define la constante `ALLOWED_STATUSES` con los tres estados válidos.
+It also defines the `ALLOWED_STATUSES` constant with the three valid statuses.
 
 ### `catalog.py`
 
-| Función | Qué devuelve |
+| Function | What it returns |
 | --- | --- |
-| `add_piece(id, name, category, price, status, description)` | La pieza como diccionario, después de validar todos los datos. |
-| `list_pieces(catalog)` | Lista con los nombres de todas las piezas. |
-| `find_piece_by_id(catalog, id)` | La pieza con ese id, o `None` si no está (no es un error). |
-| `remove_piece(catalog, id)` | `True` si la quitó, `False` si la pieza no existía. |
-| `piece_exists(catalog, id)` | `True` o `False`, sin lanzar errores. |
-| `get_catalog_summary(catalog)` | Diccionario con cuántas piezas hay por categoría. |
-| `get_pieces_by_category(catalog, category)` | Lista con los nombres de las piezas de esa categoría. |
-| `filter_by_status(catalog, status)` | Lista de piezas con ese estado; error si el estado no es válido. |
-| `filter_by_min_price(catalog, min_price)` | Lista de piezas más caras que ese precio; error si no es un número. |
-| `get_average_price(catalog)` | Precio promedio, o `0` si el catálogo está vacío. |
+| `add_piece(id, name, category, price, status, description)` | The piece as a dictionary, after validating all the data. |
+| `list_pieces(catalog)` | A list with the names of all the pieces. |
+| `find_piece_by_id(catalog, id)` | The piece with that id, or `None` if it is not there (not an error). |
+| `remove_piece(catalog, id)` | `True` if it was removed, `False` if the piece did not exist. |
+| `piece_exists(catalog, id)` | `True` or `False`, without raising errors. |
+| `get_catalog_summary(catalog)` | A dictionary with how many pieces there are per category. |
+| `get_pieces_by_category(catalog, category)` | A list with the names of the pieces in that category. |
+| `filter_by_status(catalog, status)` | A list of pieces with that status; error if the status is not valid. |
+| `filter_by_min_price(catalog, min_price)` | A list of pieces more expensive than that price; error if it is not a number. |
+| `get_average_price(catalog)` | The average price, or `0` if the catalog is empty. |
 
-Todas comprueban primero que el catálogo recibido sea una lista.
+All of them first check that the received catalog is a list.
 
 ### `main.py`
 
-Monta el menú y va llamando a las funciones de `catalog.py`. Cada opción tiene
-su propia función, así el bucle del menú queda limpio:
+Builds the menu and calls the functions in `catalog.py`. Each option has its
+own function, so the menu loop stays clean:
 
-- `show_menu()` — imprime las opciones.
-- `ask_price()` — pide el precio y lo convierte a número.
-- `print_piece(piece)` — muestra una pieza en una sola línea.
+- `show_menu()` — prints the options.
+- `ask_price()` — asks for the price and converts it to a number.
+- `print_piece(piece)` — prints a piece on a single line.
 - `option_add_piece`, `option_list_pieces`, `option_available_pieces`,
-  `option_average_price`, `option_find_piece`, `option_remove_piece` — una por
-  cada opción del menú.
-- `main()` — mantiene el programa en marcha hasta que se elige salir.
+  `option_average_price`, `option_find_piece`, `option_remove_piece` — one for
+  each menu option.
+- `main()` — keeps the program running until the user chooses to exit.
 
-## El menú
-
-```
-=== Catalogo de coleccionables ===
-1. Agregar pieza
-2. Mostrar todas las piezas
-3. Mostrar piezas disponibles
-4. Ver precio promedio
-5. Buscar pieza por ID
-6. Eliminar pieza
-7. Salir
-```
-
-## Ejemplo de uso
+## The menu
 
 ```
-Elige una opcion: 1
+=== Collectibles catalog ===
+1. Add piece
+2. Show all pieces
+3. Show available pieces
+4. Show average price
+5. Find piece by ID
+6. Remove piece
+7. Exit
+```
 
---- Agregar pieza ---
+## Usage example
+
+```
+Choose an option: 1
+
+--- Add piece ---
 ID: p1
-Nombre: Funko Batman
-Categoria: Figuras
-Precio: 25
-Estado (disponible, reservada, vendida): disponible
-Descripcion: pieza usada en caja
-Pieza agregada correctamente.
+Name: Funko Batman
+Category: Figures
+Price: 25
+Status (available, reserved, sold): available
+Description: used piece in box
+Piece added successfully.
 
-Elige una opcion: 2
+Choose an option: 2
 
---- Piezas del catalogo ---
-p1 | Funko Batman | Figuras | 25.0 | disponible
+--- Catalog pieces ---
+p1 | Funko Batman | Figures | 25.0 | available
 
-Elige una opcion: 4
+Choose an option: 4
 
---- Precio promedio ---
-El precio promedio es 25.0 euros.
+--- Average price ---
+The average price is 25.0 euros.
 ```
 
-Si se mete un dato mal, el programa avisa y sigue funcionando:
+If a value is wrong, the program warns the user and keeps running:
 
 ```
-Elige una opcion: 1
+Choose an option: 1
 
---- Agregar pieza ---
+--- Add piece ---
 ID: p2
-Nombre: Moneda romana
-Categoria: Monedas
-Precio: barato
-No se pudo agregar la pieza: El precio debe ser un numero.
+Name: Roman coin
+Category: Coins
+Price: cheap
+The piece could not be added: The price must be a number.
 ```
 
-## Notas
+## Notes
 
-- El catálogo se guarda en memoria mientras el programa está abierto; al
-  cerrarlo se pierde.
-- Los errores se controlan con `try / except`, así que el programa no se rompe
-  aunque el usuario escriba cualquier cosa.
+- The catalog is kept in memory while the program is open; it is lost when
+  the program closes.
+- Errors are handled with `try / except`, so the program does not crash
+  whatever the user types.

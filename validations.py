@@ -1,57 +1,57 @@
-"""Funciones de validacion de los datos de una pieza.
+"""Validation functions for the data of a piece.
 
-Ninguna de estas funciones imprime nada: solo lanzan ValueError
-cuando el dato recibido no es correcto.
+None of these functions print anything: they only raise ValueError
+when the received value is not valid.
 """
 
-ALLOWED_STATUSES = ["disponible", "reservada", "vendida"]
+ALLOWED_STATUSES = ["available", "reserved", "sold"]
 
 
 def validate_not_empty(value, field_name):
-    """Valida que un campo de texto no venga vacio."""
+    """Check that a text field is not empty."""
     if value is None:
-        raise ValueError("El campo '" + field_name + "' no puede estar vacio.")
+        raise ValueError("The field '" + field_name + "' cannot be empty.")
 
     if str(value).strip() == "":
-        raise ValueError("El campo '" + field_name + "' no puede estar vacio.")
+        raise ValueError("The field '" + field_name + "' cannot be empty.")
 
     return True
 
 
 def validate_price(price):
-    """Valida que el precio sea un numero y que sea mayor que cero."""
+    """Check that the price is a number greater than zero."""
     if isinstance(price, bool) or not isinstance(price, (int, float)):
-        raise ValueError("El precio debe ser un numero.")
+        raise ValueError("The price must be a number.")
 
     if price <= 0:
-        raise ValueError("El precio debe ser mayor que cero.")
+        raise ValueError("The price must be greater than zero.")
 
     return True
 
 
 def validate_status(status):
-    """Valida que el estado sea uno de los permitidos."""
+    """Check that the status is one of the allowed ones."""
     if not isinstance(status, str):
-        raise ValueError("El estado debe ser un texto.")
+        raise ValueError("The status must be text.")
 
     if status.strip().lower() not in ALLOWED_STATUSES:
         raise ValueError(
-            "El estado debe ser uno de estos: " + ", ".join(ALLOWED_STATUSES) + "."
+            "The status must be one of: " + ", ".join(ALLOWED_STATUSES) + "."
         )
 
     return True
 
 
 def validate_description(description):
-    """Valida que la descripcion incluya la palabra usada o certificada."""
+    """Check that the description includes the word used or certified."""
     if not isinstance(description, str):
-        raise ValueError("La descripcion debe ser un texto.")
+        raise ValueError("The description must be text.")
 
-    texto = description.lower()
+    text = description.lower()
 
-    if "usada" not in texto and "certificada" not in texto:
+    if "used" not in text and "certified" not in text:
         raise ValueError(
-            "La descripcion debe contener la palabra 'usada' o 'certificada'."
+            "The description must contain the word 'used' or 'certified'."
         )
 
     return True

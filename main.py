@@ -1,60 +1,60 @@
-"""Programa principal del catalogo de coleccionables."""
+"""Main program of the collectibles catalog."""
 
 import catalog as catalog_module
 
 
 def show_menu():
-    """Muestra las opciones disponibles del programa."""
+    """Print the available options of the program."""
     print("")
-    print("=== Catalogo de coleccionables ===")
-    print("1. Agregar pieza")
-    print("2. Mostrar todas las piezas")
-    print("3. Mostrar piezas disponibles")
-    print("4. Ver precio promedio")
-    print("5. Buscar pieza por ID")
-    print("6. Eliminar pieza")
-    print("7. Salir")
+    print("=== Collectibles catalog ===")
+    print("1. Add piece")
+    print("2. Show all pieces")
+    print("3. Show available pieces")
+    print("4. Show average price")
+    print("5. Find piece by ID")
+    print("6. Remove piece")
+    print("7. Exit")
 
 
 def ask_price():
-    """Pide el precio por teclado y lo devuelve como numero."""
-    raw_price = input("Precio: ").strip()
+    """Ask for the price from the keyboard and return it as a number."""
+    raw_price = input("Price: ").strip()
 
     try:
         return float(raw_price)
     except ValueError:
-        raise ValueError("El precio debe ser un numero.")
+        raise ValueError("The price must be a number.")
 
 
 def option_add_piece(catalog):
-    """Pide los datos de una pieza nueva y la agrega al catalogo."""
+    """Ask for the data of a new piece and add it to the catalog."""
     print("")
-    print("--- Agregar pieza ---")
+    print("--- Add piece ---")
 
     piece_id = input("ID: ").strip()
-    name = input("Nombre: ").strip()
-    category = input("Categoria: ").strip()
+    name = input("Name: ").strip()
+    category = input("Category: ").strip()
 
     try:
         price = ask_price()
-        status = input("Estado (disponible, reservada, vendida): ").strip()
-        description = input("Descripcion: ").strip()
+        status = input("Status (available, reserved, sold): ").strip()
+        description = input("Description: ").strip()
 
         if catalog_module.piece_exists(catalog, piece_id):
-            raise ValueError("Ya existe una pieza con el id '" + piece_id + "'.")
+            raise ValueError("A piece with id '" + piece_id + "' already exists.")
 
         piece = catalog_module.add_piece(
             piece_id, name, category, price, status, description
         )
         catalog.append(piece)
-        print("Pieza agregada correctamente.")
+        print("Piece added successfully.")
 
     except ValueError as error:
-        print("No se pudo agregar la pieza: " + str(error))
+        print("The piece could not be added: " + str(error))
 
 
 def print_piece(piece):
-    """Muestra los datos de una pieza en una sola linea."""
+    """Print the data of a piece on a single line."""
     print(
         piece["id"]
         + " | "
@@ -69,12 +69,12 @@ def print_piece(piece):
 
 
 def option_list_pieces(catalog):
-    """Muestra por pantalla todas las piezas guardadas."""
+    """Print all the stored pieces."""
     print("")
-    print("--- Piezas del catalogo ---")
+    print("--- Catalog pieces ---")
 
     if len(catalog) == 0:
-        print("Todavia no hay piezas guardadas.")
+        print("There are no pieces stored yet.")
         return
 
     for piece in catalog:
@@ -82,18 +82,18 @@ def option_list_pieces(catalog):
 
 
 def option_available_pieces(catalog):
-    """Muestra solo las piezas que estan en estado disponible."""
+    """Print only the pieces whose status is available."""
     print("")
-    print("--- Piezas disponibles ---")
+    print("--- Available pieces ---")
 
     try:
-        available = catalog_module.filter_by_status(catalog, "disponible")
+        available = catalog_module.filter_by_status(catalog, "available")
     except ValueError as error:
-        print("No se pudieron filtrar las piezas: " + str(error))
+        print("The pieces could not be filtered: " + str(error))
         return
 
     if len(available) == 0:
-        print("No hay piezas disponibles ahora mismo.")
+        print("There are no available pieces right now.")
         return
 
     for piece in available:
@@ -101,66 +101,66 @@ def option_available_pieces(catalog):
 
 
 def option_average_price(catalog):
-    """Muestra el precio promedio de las piezas del catalogo."""
+    """Print the average price of the pieces in the catalog."""
     print("")
-    print("--- Precio promedio ---")
+    print("--- Average price ---")
 
     average = catalog_module.get_average_price(catalog)
 
     if len(catalog) == 0:
         return
 
-    print("El precio promedio es " + str(round(average, 2)) + " euros.")
+    print("The average price is " + str(round(average, 2)) + " euros.")
 
 
 def option_find_piece(catalog):
-    """Pide un id y muestra la pieza si esta en el catalogo."""
+    """Ask for an id and print the piece if it is in the catalog."""
     print("")
-    print("--- Buscar pieza por ID ---")
+    print("--- Find piece by ID ---")
 
-    piece_id = input("ID a buscar: ").strip()
+    piece_id = input("ID to find: ").strip()
 
     if piece_id == "":
-        print("Tienes que escribir un id.")
+        print("You must enter an id.")
         return
 
     piece = catalog_module.find_piece_by_id(catalog, piece_id)
 
     if piece is None:
-        print("No hay ninguna pieza con el id '" + piece_id + "'.")
+        print("There is no piece with id '" + piece_id + "'.")
         return
 
     print_piece(piece)
-    print("Descripcion: " + piece["description"])
+    print("Description: " + piece["description"])
 
 
 def option_remove_piece(catalog):
-    """Pide un id y quita esa pieza del catalogo."""
+    """Ask for an id and remove that piece from the catalog."""
     print("")
-    print("--- Eliminar pieza ---")
+    print("--- Remove piece ---")
 
-    piece_id = input("ID a eliminar: ").strip()
+    piece_id = input("ID to remove: ").strip()
 
     if piece_id == "":
-        print("Tienes que escribir un id.")
+        print("You must enter an id.")
         return
 
     removed = catalog_module.remove_piece(catalog, piece_id)
 
     if removed:
-        print("Pieza eliminada correctamente.")
+        print("Piece removed successfully.")
 
 
 def main():
-    """Mantiene el menu en bucle hasta que el usuario decide salir."""
+    """Keep the menu running in a loop until the user chooses to exit."""
     catalog = []
 
     while True:
         show_menu()
-        option = input("Elige una opcion: ").strip()
+        option = input("Choose an option: ").strip()
 
         if option == "7":
-            print("Hasta luego.")
+            print("Goodbye.")
             break
         elif option == "1":
             option_add_piece(catalog)
@@ -175,7 +175,7 @@ def main():
         elif option == "6":
             option_remove_piece(catalog)
         else:
-            print("Opcion no valida, elige un numero del 1 al 7.")
+            print("Invalid option, choose a number from 1 to 7.")
 
 
 if __name__ == "__main__":
